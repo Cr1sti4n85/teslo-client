@@ -1,16 +1,24 @@
 import { Manager, Socket } from "socket.io-client";
 
-export const connectToServer = () => {
+let socket: Socket;
+export const connectToServer = (token: string) => {
   //busca servidor con socket io
-  const manager = new Manager("http://localhost:4000/socket.io/socket.io.js");
+  const manager = new Manager("http://localhost:4000/socket.io/socket.io.js", {
+    extraHeaders: {
+      authentication: token,
+    },
+  });
 
-  //por defecto se conecta al namespace root
-  const socket = manager.socket("/");
+  //se eliminan los anteriores listeners al crear nueva sesion del mismo user
+  socket?.removeAllListeners();
 
-  addListeners(socket);
+  //se crea un nuevo socket al conectar. por defecto se conecta al namespace root
+  socket = manager.socket("/");
+
+  addListeners();
 };
 
-const addListeners = (socket: Socket) => {
+const addListeners = () => {
   //el signo de exclamacion indica qu ese valor siempre existe y no hay que manjar los valores nulos
   const serverStatus = document.querySelector("#server-status")!;
 
@@ -55,8 +63,6 @@ const addListeners = (socket: Socket) => {
   socket.on(
     "message-from-server",
     (payload: { fullName: string; message: string }) => {
-      console.log(payload);
-
       const newMessage = `
       <li>
         <strong>${payload.fullName}</strong>: ${payload.message}
