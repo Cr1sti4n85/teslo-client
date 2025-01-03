@@ -7,13 +7,17 @@ document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
    <p id="server-status">Offline</p>
 
    <ul id="clients-ul">
-    <li>Pupy Daiper</li>
    </ul>
 
    <form id="message-form">
     <input type="text" id="message-input" placeholder="message"/>
     <button type="submit">Send</button
    </form>
+
+   <h3>Messages</h3>
+   <ul id="messages-ul">
+
+   </ul>
   </div>
 `;
 

@@ -17,10 +17,10 @@ const addListeners = (socket: Socket) => {
   const messageForm = document.querySelector<HTMLFormElement>("#message-form")!;
   const messageInput =
     document.querySelector<HTMLInputElement>("#message-input")!;
-  const messageBtn = document.querySelector<HTMLButtonElement>("button")!;
 
-  // TODO: #clients-ul
-  const clientsUl = document.querySelector("#clients-ul")!;
+  const clientsUl = document.querySelector<HTMLUListElement>("#clients-ul")!;
+  const messagesUl = document.querySelector<HTMLUListElement>("#messages-ul")!;
+
   //los metodos "on" son listeners que escuchan eventos del servidor
   socket.on("connect", () => {
     serverStatus.textContent = "Online";
@@ -30,7 +30,7 @@ const addListeners = (socket: Socket) => {
     serverStatus.textContent = "Offline";
   });
 
-  //recive el evento "clients-updated" del servidor
+  //recibe el evento "clients-updated" del servidor
   socket.on("clients-updated", (clients: string[]) => {
     let clientsHtml = "";
 
@@ -50,4 +50,23 @@ const addListeners = (socket: Socket) => {
 
     messageInput.value = "";
   });
+
+  //REcibir mensajes desde el servidor
+  socket.on(
+    "message-from-server",
+    (payload: { fullName: string; message: string }) => {
+      console.log(payload);
+
+      const newMessage = `
+      <li>
+        <strong>${payload.fullName}</strong>: ${payload.message}
+      
+      </li>
+      `;
+
+      const li = document.createElement("li");
+      li.innerHTML = newMessage;
+      messagesUl.append(li);
+    }
+  );
 };
