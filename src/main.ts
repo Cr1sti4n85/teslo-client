@@ -40,13 +40,16 @@ btnConnect.addEventListener("click", async () => {
 
   if (!emailInput || !passwordInput) return;
 
-  const response = await fetch("http://localhost:4000/api/auth/login", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ email: emailInput, password: passwordInput }),
-  });
+  const response = await fetch(
+    "https://teslo-api-lkh8.onrender.com/api/auth/login",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email: emailInput, password: passwordInput }),
+    }
+  );
 
   const data = await response.json();
   const { token } = data;
