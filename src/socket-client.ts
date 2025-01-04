@@ -3,11 +3,14 @@ import { Manager, Socket } from "socket.io-client";
 let socket: Socket;
 export const connectToServer = (token: string) => {
   //busca servidor con socket io
-  const manager = new Manager("http://localhost:4000/socket.io/socket.io.js", {
-    extraHeaders: {
-      authentication: token,
-    },
-  });
+  const manager = new Manager(
+    "https://teslo-api-lkh8.onrender.com/socket.io/socket.io.js",
+    {
+      extraHeaders: {
+        authentication: token,
+      },
+    }
+  );
 
   //se eliminan los anteriores listeners al crear nueva sesion del mismo user
   socket?.removeAllListeners();
